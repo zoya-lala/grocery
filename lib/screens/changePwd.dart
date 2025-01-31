@@ -2,20 +2,20 @@ import 'package:flutter/material.dart';
 import 'package:grocery_store/components/textfield.dart';
 import 'package:grocery_store/constants.dart';
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+class ChangePwd extends StatefulWidget {
+  const ChangePwd({super.key});
 
   @override
-  State<Login> createState() => _LoginState();
+  State<ChangePwd> createState() => _ChangePwdState();
 }
 
-class _LoginState extends State<Login> {
+class _ChangePwdState extends State<ChangePwd> {
   bool pwdEye = false;
 
   @override
   Widget build(BuildContext context) {
-    String email = '';
-    String pwd = '';
+    String email;
+    String pwd;
 
     return Scaffold(
       backgroundColor: Colors.black,
@@ -29,21 +29,16 @@ class _LoginState extends State<Login> {
           ),
           Positioned(
             child: SizedBox(
-              height: 50.0,
-              width: 50.0,
+              height: 40.0,
+              width: 40.0,
               child: Card(
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(5.0),
                 ),
                 color: kWhite,
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(
-                    Icons.arrow_back_ios_new,
-                    color: kDarkGreen,
-                  ),
+                child: Icon(
+                  Icons.arrow_back_ios_new,
+                  color: kDarkGreen,
                 ),
               ),
             ),
@@ -69,10 +64,9 @@ class _LoginState extends State<Login> {
                 padding: const EdgeInsets.all(30.0),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Log In',
+                      'Change Password',
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
@@ -83,7 +77,7 @@ class _LoginState extends State<Login> {
                       height: 8.0,
                     ),
                     Text(
-                      'Welcome Back! Login with your details',
+                      'Well Done! You successfully verified your account. Now Enter your new password.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: kDarkGrey,
@@ -93,22 +87,40 @@ class _LoginState extends State<Login> {
                       height: 20.0,
                     ),
                     Textfield(
-                      isStrong: false,
-                      pwdText: false,
-                      labelText: 'Email',
+                      pwdText: true,
+                      labelText: 'Enter new password',
                       onChange: (value) {
-                        setState(() {
-                          email = value;
-                        });
+                        email = value;
                       },
+                      icon: IconButton(
+                        onPressed: () {
+                          setState(() {
+                            pwdEye = !pwdEye;
+                          });
+                        },
+                        icon: Icon(
+                          pwdEye ? Icons.visibility : Icons.visibility_off,
+                        ),
+                      ),
+                      // onChange: (value) {
+                      //   pwd = value;
+                      // },
+                    ),
+                    SizedBox(
+                      height: 5.0,
+                    ),
+                    Text(
+                      '\u2022 Password must have 8 characters',
+                    ),
+                    Text(
+                      '\u2022 Must contain number or special character',
                     ),
                     SizedBox(
                       height: 15.0,
                     ),
                     Textfield(
-                      isStrong: false,
                       pwdText: true,
-                      labelText: 'Password',
+                      labelText: 'Repeat Password',
                       icon: IconButton(
                         onPressed: () {
                           setState(() {
@@ -122,7 +134,6 @@ class _LoginState extends State<Login> {
                       onChange: (value) {
                         pwd = value;
                       },
-                      // icon: pwdEye?Icons.remove_red_eye:Icons.abc_rounded,
                     ),
                     SizedBox(
                       height: 10.0,
@@ -147,7 +158,7 @@ class _LoginState extends State<Login> {
                             ),
                           ),
                           Text(
-                            'Incorrect Credentials',
+                            'The password you entered did not matched',
                             style: TextStyle(
                               color: kRed,
                             ),
@@ -167,85 +178,11 @@ class _LoginState extends State<Login> {
                           borderRadius: BorderRadius.circular(5.0)),
                       onPressed: () {},
                       child: Text(
-                        'Login',
+                        'Change Password',
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                    ),
-                    SizedBox(
-                      height: 15.0,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Forget your Password? ',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: kDarkGrey,
-                          ),
-                        ),
-                        Text(
-                          'Reset Password',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: kDarkGreen,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Divider(
-                            thickness: 2,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            'OR',
-                            style: TextStyle(
-                              color: kDarkGrey,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: Divider(
-                            thickness: 2,
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 20.0,
-                    ),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CircleAvatar(
-                          child: Image.asset(
-                            'images/google.png',
-                            height: 20.0,
-                          ),
-                          backgroundColor: kLightestRed,
-                        ),
-                        SizedBox(
-                          width: 20.0,
-                        ),
-                        CircleAvatar(
-                          child: Image.asset(
-                            'images/fb.png',
-                            height: 20.0,
-                          ),
-                          backgroundColor: kLightBlue,
-                        ),
-                      ],
                     ),
                   ],
                 ),

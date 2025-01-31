@@ -1,22 +1,26 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:grocery_store/components/textfield.dart';
 import 'package:grocery_store/constants.dart';
+import 'package:grocery_store/screens/home.dart';
+import 'package:grocery_store/screens/login.dart';
 
-class Login extends StatefulWidget {
-  const Login({super.key});
+class SignUp extends StatefulWidget {
+  const SignUp({super.key});
 
   @override
-  State<Login> createState() => _LoginState();
+  State<SignUp> createState() => _SignUpState();
 }
 
-class _LoginState extends State<Login> {
+class _SignUpState extends State<SignUp> {
   bool pwdEye = false;
+  bool isStrong = false;
+  String? email;
+  String? pwd;
+  final _auth = FirebaseAuth.instance;
 
   @override
   Widget build(BuildContext context) {
-    String email = '';
-    String pwd = '';
-
     return Scaffold(
       backgroundColor: Colors.black,
       body: Stack(
@@ -27,29 +31,24 @@ class _LoginState extends State<Login> {
               fit: BoxFit.cover,
             ),
           ),
-          Positioned(
-            child: SizedBox(
-              height: 50.0,
-              width: 50.0,
-              child: Card(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(5.0),
-                ),
-                color: kWhite,
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  icon: Icon(
-                    Icons.arrow_back_ios_new,
-                    color: kDarkGreen,
-                  ),
-                ),
-              ),
-            ),
-            top: 20.0,
-            left: 20.0,
-          ),
+          // Positioned(
+          //   child: SizedBox(
+          //     height: 40.0,
+          //     width: 40.0,
+          //     child: Card(
+          //       shape: RoundedRectangleBorder(
+          //         borderRadius: BorderRadius.circular(5.0),
+          //       ),
+          //       color: kWhite,
+          //       child: Icon(
+          //         Icons.arrow_back_ios_new,
+          //         color: kDarkGreen,
+          //       ),
+          //     ),
+          //   ),
+          //   top: 20.0,
+          //   left: 20.0,
+          // ),
           Positioned(
             bottom: 0,
             // left: 0,
@@ -72,7 +71,7 @@ class _LoginState extends State<Login> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Log In',
+                      'Sign Up',
                       textAlign: TextAlign.left,
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
@@ -83,7 +82,7 @@ class _LoginState extends State<Login> {
                       height: 8.0,
                     ),
                     Text(
-                      'Welcome Back! Login with your details',
+                      'Hi! Let\'s create your account.',
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         color: kDarkGrey,
@@ -97,17 +96,15 @@ class _LoginState extends State<Login> {
                       pwdText: false,
                       labelText: 'Email',
                       onChange: (value) {
-                        setState(() {
-                          email = value;
-                        });
+                        email = value;
                       },
                     ),
                     SizedBox(
                       height: 15.0,
                     ),
                     Textfield(
-                      isStrong: false,
-                      pwdText: true,
+                      isStrong: true,
+                      pwdText: !pwdEye,
                       labelText: 'Password',
                       icon: IconButton(
                         onPressed: () {
@@ -125,35 +122,13 @@ class _LoginState extends State<Login> {
                       // icon: pwdEye?Icons.remove_red_eye:Icons.abc_rounded,
                     ),
                     SizedBox(
-                      height: 10.0,
+                      height: 5.0,
                     ),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(8.0),
-                        color: kLightestRed,
-                      ),
-                      padding: EdgeInsets.all(6.0),
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            height: 20.0,
-                            child: CircleAvatar(
-                              child: Icon(
-                                size: 12.0,
-                                Icons.priority_high,
-                                color: kWhite,
-                              ),
-                              backgroundColor: kRed,
-                            ),
-                          ),
-                          Text(
-                            'Incorrect Credentials',
-                            style: TextStyle(
-                              color: kRed,
-                            ),
-                          ),
-                        ],
-                      ),
+                    Text(
+                      '\u2022 Password must have 8 characters',
+                    ),
+                    Text(
+                      '\u2022 Must contain number or special character',
                     ),
                     SizedBox(
                       height: 40.0,
@@ -165,9 +140,26 @@ class _LoginState extends State<Login> {
                       textColor: kWhite,
                       shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(5.0)),
-                      onPressed: () {},
+                      onPressed: () async {
+                        try {
+                          final newUser =
+                              await _auth.createUserWithEmailAndPassword(
+                                  email: email!, password: pwd!);
+                          print(email);
+                          if (newUser != null) {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Home(),
+                              ),
+                            );
+                          }
+                        } catch (e) {
+                          print(e);
+                        }
+                      },
                       child: Text(
-                        'Login',
+                        'Sign Up',
                         style: TextStyle(
                           fontWeight: FontWeight.w700,
                         ),
@@ -180,17 +172,27 @@ class _LoginState extends State<Login> {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Forget your Password? ',
+                          'Already have an account?',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: kDarkGrey,
                           ),
                         ),
-                        Text(
-                          'Reset Password',
-                          style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: kDarkGreen,
+                        TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Login(),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            'Log in',
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: kDarkGreen,
+                            ),
                           ),
                         ),
                       ],

@@ -14,3 +14,7 @@ const kLightestRed = Color(0xffffe9e9);
 const kLightBlue = Color(0xffe4efff);
 
 const kWhite = Color(0xffffffff);
+const kHeading = TextStyle(
+  fontWeight: FontWeight.bold,
+  fontSize: 25.0,
+);
